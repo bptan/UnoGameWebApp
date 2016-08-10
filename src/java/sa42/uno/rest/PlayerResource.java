@@ -69,7 +69,7 @@ public class PlayerResource {
         }
         Player player = optPlayer.get();
         
-        return (Response.ok(player.toJson()).header(
+        return (Response.ok(player.toJsonHandOnly()).header(
                 "Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
       
     }

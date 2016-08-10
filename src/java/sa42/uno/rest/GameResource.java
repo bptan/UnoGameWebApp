@@ -90,7 +90,7 @@ public class GameResource {
     public JsonObject start(@PathParam("id")String id) {
         Game game = mgr.start(id);
         
-        
+      
         return game.toJson();
     }
     
