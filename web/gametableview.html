@@ -6,30 +6,28 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Uno with Friends</title>
+        <title>Game Table View</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="libs/handlebars-v4.0.5.js"></script>
         <script src="libs/jquery-3.1.0.js"></script>
-        <script type="text/x-handlebars" id="gamesTemplate">
-            {{#each games }}
-            <tr>
-                <td><h3>{{this.title}}</h3></td>
-                <td><h4>{{this.gameid}}</h4></td>
-                <td><p>{{this.status}}</p></td>
-                <td><p>{{this.numOfPlayers}}</p></td>
-                <td><button data-gameId="{{this.gameid}}">Start</button></td>
-            </tr>
-            {{/each}}
-        </script>
-        <script src="scripts/viewallgames.js"></script>
+        <script type="text/x-handlebars" id="playersTemplate">
+               {{#each players }}
+        <li>
+            <h3>{{this}}</h3>            
+        </li>
+        {{/each}}
+    </script>
+        <script src="scripts/gametableview.js"></script>
         
     </head>
     <body>
         <div><h1>Game Table</h1></div>
-        <button id="btnShowTable">Click Me</button>
+        
         <p>Players:</p><br>
         
+        <ul class="list" id="all-players">
+        </ul>
         <div id="discardPile"></div>
     </body>
 </html>
