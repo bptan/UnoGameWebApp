@@ -19,7 +19,7 @@ and open the template in the editor.
                 <td><h4>{{this.gameid}}</h4></td>
                 <td><p>{{this.status}}</p></td>
                 <td><p>{{this.numOfPlayers}}</p></td>
-                <td><button>Start</button></td>
+                <td><button data-gameId="{{this.gameid}}">Start</button></td>
             </tr>
             {{/each}}
         </script>
@@ -39,6 +39,8 @@ and open the template in the editor.
                 </thead>
                     <tbody id="all-games"></tbody>
                             
-            </table>      
+            </table>
+        
+        <button id="btnCreateMore">Create more games</button>
     </body>
 </html>

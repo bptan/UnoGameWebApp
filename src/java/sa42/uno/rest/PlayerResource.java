@@ -40,9 +40,11 @@ public class PlayerResource {
             return (Response.status(Response.Status.NOT_FOUND)
                     .header("Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
         }
-
+ 
         Game game = opt.get();
-
+        if(game.getStatus()!=Game.Status.Waiting){
+            return(Response.serverError().build());
+        }
         Player p = new Player(username);
         game.addPlayer(p);
         
@@ -61,7 +63,7 @@ public class PlayerResource {
                 "Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
         }
         Game game = opt.get(); 
-
+ 
         Optional<Player> optPlayer = game.getPlayer(username);
         if (!optPlayer.isPresent()){
             return (Response.status(Response.Status.NOT_FOUND).header(

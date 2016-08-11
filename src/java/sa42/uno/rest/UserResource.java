@@ -37,10 +37,11 @@ public class UserResource {
         Boolean result = mgr.registerUser(username, password);
         
         if(result){
-            return (Response.ok("ok")
+            return (Response.ok(username)
                     .header("Access-Control-Allow-Origin","http://localhost:63342").build());
         }else{
-            return (Response.noContent().build());
+            return (Response.noContent()
+                    .header("Access-Control-Allow-Origin","http://localhost:63342").build());
         }       
     }
     

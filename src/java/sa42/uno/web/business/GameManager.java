@@ -56,9 +56,10 @@ public class GameManager {
         Game myGame = games.get(id);
         myGame.setStatus(Game.Status.Started);
         myGame.distributeCards();
+        myGame.addToDiscardPile(myGame.takeCardFromDeck());
         System.out.println(myGame.toString());
-        System.out.println(myGame.getPlayer("bob").toString());
         
+         
         return myGame;
     }
 }

@@ -6,6 +6,7 @@
 package sa42.uno.rest;
 
 import java.util.Map;
+import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -34,6 +35,7 @@ public class GameResource {
     
     @Inject
     private GameManager mgr;
+    private final String PLAYERVIEW_URL = "http://localhost:63342";
     
     @POST
     @Path("/create")
@@ -42,7 +44,7 @@ public class GameResource {
     public Response create(@FormParam("title")String title) {
         
         String id = mgr.create(title);
-        return Response.ok("<a href=\"http://localhost:8080/uno/viewallgames.html\">View all games :)</a>").build();
+        return Response.ok("success").build();
                 
                
     }
@@ -91,8 +93,24 @@ public class GameResource {
         Game game = mgr.start(id);
         
       
-        return game.toJson();
+        return game.toGameTableJson();
     }
-    
-    
+    /*
+    @GET
+    @Path("/get/{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getGame(@PathParam("id")String id){
+        Optional<Game> opt = mgr.getOneGame(id);
+        if (!opt.isPresent()){
+            return (Response.status(Response.Status.BAD_REQUEST).header(
+                "Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
+        }
+        Game game = opt.get();
+        
+        return (Response.ok(game.toJson()).header(
+                "Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
+        
+    }
+    */
 }

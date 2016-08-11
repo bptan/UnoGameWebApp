@@ -32,7 +32,7 @@ public class UserManager {
     private int checkUsernameInUse(String username) {
 
         return 0;
-    }
+    } 
 
     public Boolean registerUser(String username, String password) {
         Users u = new Users();

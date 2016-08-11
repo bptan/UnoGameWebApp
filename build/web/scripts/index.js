@@ -6,6 +6,17 @@
 
 $(function(){
     
+    $("#btnCreate").on("click",function(){
+        console.log("before click")
+        var promise = $.post("api/games/create",
+            {title:$("#txtTitle").val()});
+        
+        promise.done(function(result){
+            var status = result;
+            console.log(status);
+            window.location.replace("/uno/viewallgames.html");         
+        })
+    })
     
     
 });
