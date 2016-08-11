@@ -39,18 +39,6 @@ $(function(){
         window.location.replace("/uno/index.html");
     });
     
-    $("#btnShowTable").on("click",function(){
-        /*
-        var promise = $.getJSON("http://localhost:8080/uno/api/games/get/"+gid)
-        promise.done(function(result){
-            console.log(result);
-        });*/
-        var game = userData.getUserDataFromSession();
-        var cardUrl = $('<p class = "discarded">');
-        var img = $("<img>").attr("src","Images/"+game.topCardOfDiscardPile+".png");
-        cardUrl.append(img);
-        $("#discardPile").append(cardUrl);
-        console.log(game);
-    })
+    
    
 });

@@ -5,10 +5,10 @@
         <group>
             <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/src/java/sa42/uno/web/business/GameManager.java</file>
             <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/web/index.html</file>
-            <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/src/java/sa42/uno/rest/GameResource.java</file>
             <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/web/viewallgames.html</file>
-            <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/src/java/sa42/uno/rest/UserResource.java</file>
-            <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/web/scripts/index.js</file>
+            <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/web/scripts/viewallgames.js</file>
+            <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/web/scripts/gametableview.js</file>
+            <file>file:/Users/BP/NetBeansProjects/UnoGameWebApp/web/gametableview.html</file>
         </group>
     </open-files>
 </project-private>
