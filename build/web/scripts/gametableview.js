@@ -9,13 +9,13 @@ $(function(){
    var userData = {
  storeUserDataInSession: function(userData) {
      var userObjectString = JSON.stringify(userData);
-     window.sessionStorage.setItem('userObject',userObjectString)
+     window.sessionStorage.setItem('userObject',userObjectString);
  },
  getUserDataFromSession: function() {
-     var userData = window.sessionStorage.getItem('userObject')
+     var userData = window.sessionStorage.getItem('userObject');
      return JSON.parse(userData);
  }
-} 
+};
 
         var game = userData.getUserDataFromSession();
         var cardUrl = $('<p class = "discarded">');
