@@ -6,7 +6,6 @@
 package sa42.uno.rest;
 
 import java.util.Map;
-import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -35,7 +34,6 @@ public class GameResource {
     
     @Inject
     private GameManager mgr;
-    private final String PLAYERVIEW_URL = "http://localhost:63342";
     
     @POST
     @Path("/create")
@@ -64,8 +62,7 @@ public class GameResource {
             arrBuilder.add(j);
         });
         
-        return (Response.ok(arrBuilder.build()).header(
-                "Access-Control-Allow-Origin", "http://localhost:63342").build());
+        return (Response.ok(arrBuilder.build()).build());
     }
     
     @GET
@@ -81,8 +78,7 @@ public class GameResource {
             arrBuilder.add(j);
         });
 
-        return (Response.ok(arrBuilder.build()).header(
-                "Access-Control-Allow-Origin", "http://localhost:63342").build());
+        return (Response.ok(arrBuilder.build()).build());
     }
     
     @GET

@@ -28,7 +28,6 @@ import sa42.uno.web.business.GameManager;
 public class PlayerResource {
     
     @Inject private GameManager mgr;
-    private final String PLAYERVIEW_URL = "http://localhost:63342";
     
     @GET
     @Path("/{gid}")
@@ -38,7 +37,7 @@ public class PlayerResource {
         Optional<Game> opt = mgr.getOneGame(gameId);
         if (!opt.isPresent()) {
             return (Response.status(Response.Status.NOT_FOUND)
-                    .header("Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
+                    .build());
         }
  
         Game game = opt.get();
@@ -48,8 +47,7 @@ public class PlayerResource {
         Player p = new Player(username);
         game.addPlayer(p);
         
-        return (Response.ok().header(
-                "Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
+        return (Response.ok().build());
     }
     
     @GET
@@ -59,20 +57,17 @@ public class PlayerResource {
         
         Optional<Game> opt = mgr.getOneGame(gameId);
         if (!opt.isPresent()){
-            return (Response.status(Response.Status.BAD_REQUEST).header(
-                "Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
+            return (Response.status(Response.Status.BAD_REQUEST).build());
         }
         Game game = opt.get(); 
  
         Optional<Player> optPlayer = game.getPlayer(username);
         if (!optPlayer.isPresent()){
-            return (Response.status(Response.Status.NOT_FOUND).header(
-                "Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
+            return (Response.status(Response.Status.NOT_FOUND).build());
         }
         Player player = optPlayer.get();
         
-        return (Response.ok(player.toJsonHandOnly()).header(
-                "Access-Control-Allow-Origin",PLAYERVIEW_URL).build());
+        return (Response.ok(player.toJsonHandOnly()).build());
       
     }
     
