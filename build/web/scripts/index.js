@@ -8,7 +8,7 @@ $(function(){
     
     $("#btnCreate").on("click",function(){
         console.log("before click")
-        var promise = $.post("api/games/create",
+        var promise = $.post("api/games",
             {title:$("#txtTitle").val()});
         
         promise.done(function(result){

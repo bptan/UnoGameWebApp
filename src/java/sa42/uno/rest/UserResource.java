@@ -7,6 +7,8 @@ package sa42.uno.rest;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -22,22 +24,23 @@ import sa42.uno.web.business.UserManager;
  */
 @RequestScoped
 @Path("/user")
+@Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
     @EJB UserManager mgr;
-    
-    
-    
+        
     @POST
-    @Path("/register")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/plain")
     public Response register(
             @FormParam("username")String username,
             @FormParam("password")String password){
         Boolean result = mgr.registerUser(username, password);
         
+        
         if(result){
-            return (Response.ok(username).build());
+            JsonObject data = Json.createObjectBuilder()
+                    .add("username", username).build();
+
+            return (Response.ok(data).build());
         }else{
             return (Response.noContent().build());
         }       

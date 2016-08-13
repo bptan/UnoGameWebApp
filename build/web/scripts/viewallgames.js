@@ -1,12 +1,8 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+var rootURL = "http://localhost:8080/uno/api";
 $(function(){
+    
     var gamesTemplate = Handlebars.compile($("#gamesTemplate").html());
-    var promise = $.getJSON("http://localhost:8080/uno/api/games/all")
+    var promise = $.getJSON(rootURL+"/games/all")
     var gid;
     var userData = {
  storeUserDataInSession: function(userData) {
@@ -26,7 +22,10 @@ $(function(){
    
     $("#all-games").on("click", "[data-gameId]", function() {
         gid = $(this).attr("data-gameId");
-        var promise = $.getJSON("http://localhost:8080/uno/api/games/start/"+gid)
+        var promise = $.ajax({
+                type:'PUT',
+                url:rootURL+"/games/start/"+gid 
+            });
             promise.done(function(result) {
                 console.log("button clicked");
                 window.location.replace("/uno/gametableview.html");

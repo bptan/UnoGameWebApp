@@ -5,10 +5,13 @@
  */
 package sa42.uno.rest;
 
+import java.util.Map;
 import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -25,11 +28,14 @@ import sa42.uno.web.business.GameManager;
  */
 @RequestScoped
 @Path("/games")
+@Produces(MediaType.APPLICATION_JSON)
 public class PlayerResource {
-    
-    @Inject private GameManager mgr;
-    
-    @GET
+
+    @Inject
+    private GameManager mgr;
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{gid}")
     public Response joinGame(@PathParam("gid") String gameId,
             @QueryParam("username") String username) {
@@ -39,36 +45,48 @@ public class PlayerResource {
             return (Response.status(Response.Status.NOT_FOUND)
                     .build());
         }
- 
+
         Game game = opt.get();
-        if(game.getStatus()!=Game.Status.Waiting){
-            return(Response.serverError().build());
+        Map<String, Player> players = game.getPlayers();
+
+        //cannot join but may navigate to game if already joined
+        if (game.getStatus() != Game.Status.Waiting) {
+            //check if player is in game
+            if (players.get(username) != null) {
+                return (Response.ok().build());
+            } else {
+                return (Response.status(Response.Status.UNAUTHORIZED)
+                        .build());
+            }
+        } else {
+            //still can join
+            System.out.println(players.toString());
+            if (players.get(username) == null) {
+                Player p = new Player(username);
+                game.addPlayer(p);
+            }
+            return (Response.ok().build());
         }
-        Player p = new Player(username);
-        game.addPlayer(p);
-        
-        return (Response.ok().build());
     }
-    
+
     @GET
     @Path("{gid}/players/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response viewHand(@PathParam("gid")String gameId,@PathParam("name")String username){
-        
+    public Response viewHand(@PathParam("gid") String gameId, @PathParam("name") String username) {
+
         Optional<Game> opt = mgr.getOneGame(gameId);
-        if (!opt.isPresent()){
+        if (!opt.isPresent()) {
             return (Response.status(Response.Status.BAD_REQUEST).build());
         }
-        Game game = opt.get(); 
- 
+        Game game = opt.get();
+        System.out.println(game.getStatus().toString());
         Optional<Player> optPlayer = game.getPlayer(username);
-        if (!optPlayer.isPresent()){
+        if (!optPlayer.isPresent()) {
             return (Response.status(Response.Status.NOT_FOUND).build());
         }
         Player player = optPlayer.get();
-        
+
         return (Response.ok(player.toJsonHandOnly()).build());
-      
+
     }
-    
+
 }

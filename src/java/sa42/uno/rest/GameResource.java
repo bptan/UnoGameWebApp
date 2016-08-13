@@ -15,6 +15,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -30,26 +31,24 @@ import sa42.uno.web.business.GameManager;
  */
 @RequestScoped
 @Path("/games")
+@Produces(MediaType.APPLICATION_JSON)
 public class GameResource {
     
     @Inject
     private GameManager mgr;
     
     @POST
-    @Path("/create")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.TEXT_HTML)
     public Response create(@FormParam("title")String title) {
         
-        String id = mgr.create(title);
-        return Response.ok("success").build();
+        mgr.create(title);
+        return Response.ok().build();
                 
                
     }
     
     @GET
     @Path("/all")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
         System.out.println("getallgames");
         Map<String, Game> games = mgr.getGames();        
@@ -66,7 +65,6 @@ public class GameResource {
     }
     
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response browsemany(@QueryParam("username") String name) {
         Map<String, Game> games = mgr.browseAvailableGames(name);        
         JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
@@ -81,10 +79,8 @@ public class GameResource {
         return (Response.ok(arrBuilder.build()).build());
     }
     
-    @GET
+    @PUT
     @Path("start/{id}")
-    @Consumes("application/json")
-    @Produces("application/json")
     public JsonObject start(@PathParam("id")String id) {
         Game game = mgr.start(id);
         

@@ -54,12 +54,13 @@ public class GameManager {
     public Game start(String id) {
        
         Game myGame = games.get(id);
-        myGame.setStatus(Game.Status.Started);
-        myGame.distributeCards();
-        myGame.addToDiscardPile(myGame.takeCardFromDeck());
-        System.out.println(myGame.toString());
-        
-         
+        System.out.println(myGame.getStatus());
+        if(myGame.getStatus()==Game.Status.Waiting){
+            myGame.setStatus(Game.Status.Started);
+            myGame.distributeCards();
+            myGame.addToDiscardPile(myGame.takeCardFromDeck());
+        }
+     
         return myGame;
     }
 }
