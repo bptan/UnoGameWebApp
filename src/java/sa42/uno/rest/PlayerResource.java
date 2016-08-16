@@ -10,17 +10,21 @@ import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
+
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+//import javax.ws.rs.
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.PathParam;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import sa42.uno.model.Game;
 import sa42.uno.model.Player;
 import sa42.uno.web.business.GameManager;
+
 
 /**
  *
@@ -33,12 +37,14 @@ public class PlayerResource {
 
     @Inject
     private GameManager mgr;
+    
+    
 
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{gid}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("/{gid}/players")
     public Response joinGame(@PathParam("gid") String gameId,
-            @QueryParam("username") String username) {
+            @FormParam("username") String username) {
 
         Optional<Game> opt = mgr.getOneGame(gameId);
         if (!opt.isPresent()) {
@@ -47,7 +53,7 @@ public class PlayerResource {
         }
 
         Game game = opt.get();
-        Map<String, Player> players = game.getPlayers();
+        Map<String, Player> players = game.getPlayersMAP();
 
         //cannot join but may navigate to game if already joined
         if (game.getStatus() != Game.Status.Waiting) {
@@ -63,7 +69,7 @@ public class PlayerResource {
             System.out.println(players.toString());
             if (players.get(username) == null) {
                 Player p = new Player(username);
-                game.addPlayer(p);
+                game.addPlayer(p);                
             }
             return (Response.ok().build());
         }

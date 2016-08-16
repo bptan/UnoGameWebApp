@@ -39,12 +39,9 @@ public class GameResource {
     
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response create(@FormParam("title")String title) {
-        
+    public Response create(@FormParam("title")String title) {        
         mgr.create(title);
-        return Response.ok().build();
-                
-               
+        return Response.ok().build();             
     }
     
     @GET
@@ -80,11 +77,10 @@ public class GameResource {
     }
     
     @PUT
-    @Path("start/{id}")
+    @Path("/{id}")
     public JsonObject start(@PathParam("id")String id) {
         Game game = mgr.start(id);
-        
-      
+     
         return game.toGameTableJson();
     }
     /*

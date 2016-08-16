@@ -6,12 +6,16 @@
 package sa42.uno.web.business;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.JsonObject;
+import javax.websocket.Session;
 import sa42.uno.model.Game;
+import sa42.uno.ws.RulesOfTheGame;
 
 
 /**
@@ -21,18 +25,19 @@ import sa42.uno.model.Game;
 @ApplicationScoped
 public class GameManager {
     
-    private Map<String,Game> games = new HashMap<>();
+    private final Map<String,Game> games = new HashMap<>();
+    
     
     public String create(String title) {
         
         String id = UUID.randomUUID().toString().substring(0, 8);
         Game myGame = new Game(id,title);
-       
+        
         games.put(id, myGame);
         System.out.println("game created:" + games.get(id).toString());
         return id;
     }
-    
+        
     public Map<String,Game> browseAvailableGames(String username){
         
         //TODO some filtering by player
@@ -58,7 +63,8 @@ public class GameManager {
         if(myGame.getStatus()==Game.Status.Waiting){
             myGame.setStatus(Game.Status.Started);
             myGame.distributeCards();
-            myGame.addToDiscardPile(myGame.takeCardFromDeck());
+            myGame.getTable().add(myGame.takeCardFromDeck());
+            RulesOfTheGame.startGame(myGame);
         }
      
         return myGame;
