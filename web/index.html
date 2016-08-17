@@ -28,8 +28,9 @@ and open the template in the editor.
         <script type="text/x-handlebars" id="playersTemplate">
             {{#each players }}
             <div drop-target="{{this}}">
-            <p class="playerName">{{this}}</p><br>
-            <button data-playername="{{this}}">Draw Card</button>
+            <h1 class="playerName">{{this}}</h1>
+            <button data-playername="{{this}}">Draw Card</button><br>
+    
             </div>
             {{/each}}
         </script>
