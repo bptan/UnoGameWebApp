@@ -22,6 +22,7 @@ $(function () {
 
     $("#btnCreateMore").on("singletap", function () {
         $.UIGoToArticle("#createGame");
+        $("#txtTitle").val("");
     });
 
     $("#btnReload").on("singletap", function () {
@@ -38,7 +39,7 @@ $(function () {
         gid = $(this).find("h4").text();
         socket = new WebSocket("ws://localhost:8080/uno/games/" + gid + "/verysecrettable");
         $("#gametitle").empty();
-        $("#gametitle").append($(this).find("h3").text());
+        $("#gametitle").append("Room: "+$(this).find("h3").text());
         socket.onopen = function () {
             console.log("Websocket is connected");
             $.UIGoToArticle("#selectedGame");
