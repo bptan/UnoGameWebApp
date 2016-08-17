@@ -10,9 +10,10 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="libs/chui/chui-ios-3.9.2.css"/>
-
+        <link rel="stylesheet" href="newindex.css"/>
         <script src="libs/handlebars-v4.0.5.js"></script>
         <script src="libs/jquery-3.1.0.js"></script>
+        <script src="libs/jquery-ui.js"></script>
         <script src="libs/chui/chui-3.9.2.js"></script>
         <script type="text/x-handlebars" id="gamesTemplate">
             {{#each games }}
@@ -26,12 +27,14 @@ and open the template in the editor.
         </script>
         <script type="text/x-handlebars" id="playersTemplate">
             {{#each players }}
-            <li>
-            <h3>{{this}}</h3>            
-            </li>
+            <div drop-target="{{this}}">
+            <p class="playerName">{{this}}</p><br>
+            <button data-playername="{{this}}">Draw Card</button>
+            </div>
             {{/each}}
         </script>
         <script src="scripts/newindex.js"></script>
+        
     </head>
     <body>
         <nav>
@@ -77,10 +80,21 @@ and open the template in the editor.
         </nav>
         <article id="selectedGame">
             <section>
-                <ul class="list" id="discardPile">
-
-                </ul>
-                <ul class="list" id="all-players"></ul>
+                <div id="gametitle"></div>
+                <table border="1">
+                    <col width="150">
+                    <col width="150">
+                    <col width="150">
+                    <tr>
+                        <td height ="400" id="all-players"></td>
+                        <td id="discardPile"></td>
+                        <td id="drawCards"><img alt="Unocard" class="special" src="Images/back.png" data-draw></td>
+                    </tr>        
+                    
+                </table> 
+                
+                
+                <h2 id="cards-remaining"></h2>
             </section>
         </article>
 

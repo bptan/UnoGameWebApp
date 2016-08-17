@@ -13,6 +13,8 @@ import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonException;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.websocket.CloseReason;
@@ -81,22 +83,31 @@ public class GameEndpoint {
     }
 
     @OnMessage
-    public void onMessage(Session session, String msg) {
+    public void onMessage(Session session, String msg,@PathParam("gid")String gameid) {
         System.out.println(">>connection: " + session.getOpenSessions().size());
         InputStream bis = new ByteArrayInputStream(msg.getBytes());
-        JsonReader reader = Json.createReader(bis);
-        JsonObject jsObj = reader.readObject();
+        JsonReader reader = Json.createReader(bis);      
+        JsonObject  jsObj = reader.readObject();
+
+        
+        Optional<Game> opt = mgr.getOneGame(gameid);
+        Game game = opt.get();
 
         String command = jsObj.getString(ATTRIBUTE_COMMAND);
 
         switch (command) {
-            case COMMAND_STARTGAME:
-
-                break;
+            
             case COMMAND_DRAWCARD:
+                RulesOfTheGame.drawCard(game, 
+                        jsObj.getString(ATTRIBUTE_PLAYERNAME), 
+                        game.takeCardFromDeck());
 
                 break;
             case COMMAND_PLAYCARD:
+                
+                RulesOfTheGame.playCard(game, 
+                        jsObj.getString(ATTRIBUTE_PLAYERNAME), 
+                        jsObj.getString(ATTRIBUTE_CARD));
                 break;
 
             default:

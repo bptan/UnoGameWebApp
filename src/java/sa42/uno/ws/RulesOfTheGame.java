@@ -26,51 +26,38 @@ import static sa42.uno.ws.Constants.*;
 public class RulesOfTheGame {
 
     public static void startGame(Game game) {
-        
-        JsonObject msg = Json.createObjectBuilder()
-                .add(ATTRIBUTE_COMMAND, COMMAND_YOURCARDS)
-                .add(ATTRIBUTE_GID, game.getId())
-                .add(ATTRIBUTE_PLAYERNAME, game.playerNameAsJsonArray())
-                .add(ATTRIBUTE_HAND, game.getTable().get(game.getTable().size()-1).toJson())
-                .add(ATTRIBUTE_DECKSIZE, game.getDeck().getNumberOfCards())
-                .build();
-        System.out.println(msg.toString());
-        try {
-            game.send(msg);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        
-        for (Player p : game.getPlayers()) {
-            JsonObject msg2 = Json.createObjectBuilder()
-                    .add(ATTRIBUTE_COMMAND, COMMAND_YOURCARDS)
-                    .add(ATTRIBUTE_GID, game.getId())
-                    .add(ATTRIBUTE_PLAYERNAME, p.getName())
-                    .add(ATTRIBUTE_HAND, p.toJsonHandOnly())
-                    .build();
-            try {
-                p.send(msg2);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        updateGameTable(game);
+              
+        for (Player p : game.getPlayers()) {           
+            updatePlayerHand(game,p);           
         }
 
     }
 
-    public static void playCard(Game game, String playedBy, Card card) {
-
+    public static void playCard(Game game, String playedBy, String card) {
+/*
         JsonObject msg = Json.createObjectBuilder()
                 .add(ATTRIBUTE_COMMAND, COMMAND_PLAYCARD)
                 .add(ATTRIBUTE_GID, game.getId())
                 .add(ATTRIBUTE_PLAYERNAME, playedBy)
-                .add(ATTRIBUTE_CARD, card.toJson())
+                .add(ATTRIBUTE_CARD, card)
                 .build();
-
-        try {
-            game.send(msg);
-        } catch (IOException ex) {
-            //session fail
-        }
+        System.out.println(msg.toString());
+        */
+        Optional<Player> opt = game.getPlayer(playedBy);
+        
+        if (!opt.isPresent()) {
+            return;
+        }       
+        Player player = opt.get();
+        System.out.println(card); 
+        Card removed = player.removeCard(card);
+        System.out.println(removed.toString());
+        Stack<Card> table = game.addToTable(removed);
+        System.out.println(table.toString());// table is updated
+        
+        updateGameTable(game);
+        updatePlayerHand(game,player);
     }
 
     public static void drawCard(Game game, String pname, Card card) {
@@ -78,22 +65,41 @@ public class RulesOfTheGame {
         Optional<Player> opt = game.getPlayer(pname);
         if (!opt.isPresent()) {
             return;
-        }
-
-        JsonObject msg = Json.createObjectBuilder()
-                .add(ATTRIBUTE_COMMAND, COMMAND_DRAWCARD)
-                .add(ATTRIBUTE_GID, game.getId())
-                .add(ATTRIBUTE_PLAYERNAME, pname)
-                .add(ATTRIBUTE_CARD, card.toJson())
-                .build();
-
+        }       
         Player player = opt.get();
-        try {
-            player.send(msg);
-        } catch (IOException ex) {
-            //session fail
-        }
-
+        
+        player.addCard(card);
+        updatePlayerHand(game,player);
+        updateGameTable(game);
     }
+    private static void updateGameTable(Game game){
+        JsonObject msg = Json.createObjectBuilder()
+                .add(ATTRIBUTE_COMMAND, COMMAND_YOURCARDS)
+                .add(ATTRIBUTE_GID, game.getId())
+                .add(ATTRIBUTE_PLAYERNAME, game.playerNameAsJsonArray())
+                .add(ATTRIBUTE_HAND, game.getTable().get(game.getTable().size()-1).toJson())
+                .add(ATTRIBUTE_DECKSIZE, game.getDeck().getNumberOfCards())
+                .build();
+               
+        System.out.println(msg.toString());
+        try {
+            game.send(msg);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }       
+    }
+    private static void updatePlayerHand(Game game,Player player){
+        JsonObject msg2 = Json.createObjectBuilder()
+                    .add(ATTRIBUTE_COMMAND, COMMAND_YOURCARDS)
+                    .add(ATTRIBUTE_GID, game.getId())
+                    .add(ATTRIBUTE_PLAYERNAME, player.getName())
+                    .add(ATTRIBUTE_HAND, player.toJsonHandOnly())
+                    .build();
+            try {
+                player.send(msg2);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+    };
 
 }

@@ -29,6 +29,7 @@ $(function () {
         var promise = $.getJSON("api/games/all");
 
         promise.done(function (result) {
+            $("#all-games").empty();
             $("#all-games").append(gamesTemplate({games: result}));
         });
     });
@@ -36,30 +37,68 @@ $(function () {
     $("#all-games").on("singletap", "li", function () {
         gid = $(this).find("h4").text();
         socket = new WebSocket("ws://localhost:8080/uno/games/" + gid + "/verysecrettable");
+        $("#gametitle").empty();
+        $("#gametitle").append($(this).find("h3").text());
         socket.onopen = function () {
             console.log("Websocket is connected");
             $.UIGoToArticle("#selectedGame");
+            $("#discardPile").empty();
+            $("#all-players").empty();
+            $("#cards-remaining").empty();
         };
         socket.onmessage = function (msg) {
 
             var jsonObj = JSON.parse(msg.data);//why must parse? String->Json
             /*
-            if((jsonObj.command === "yourcards")&&(jsonObj.pname==="verysecrettable")){
-                var message = {};
-                message.command = "startgame";
-                message.gid = gid;
-                
-                socket.send();
-            }*/
-            var cardUrl = $('<p class = "discarded">');
-            var img = $("<img>").attr("src","Images/"+jsonObj.hand.image+".png");
-            cardUrl.append(img);
-            $("#discardPile").append(cardUrl);  
-            $("#all-players").append(playersTemplate({players: jsonObj.pname}));               
-            console.log(jsonObj);
-        };      
+             if((jsonObj.command === "yourcards")&&(jsonObj.pname==="verysecrettable")){
+             var message = {};
+             message.command = "startgame";
+             message.gid = gid;
+             
+             socket.send();
+             }*/
+            var jsonObj = JSON.parse(msg.data);
+            if (jsonObj.command === "yourcards") {
+                var cardUrl = $('<p class = "discarded">');
+                var img = $("<img>").attr("src", "Images/" + jsonObj.hand.image + ".png");
+                cardUrl.append(img);
+
+                $("#discardPile").empty();
+                $("#discardPile").append(cardUrl);
+                $("#all-players").empty();
+                $("#all-players").append(playersTemplate({players: jsonObj.pname}));
+                $("#cards-remaining").empty();
+                $("#cards-remaining").append("<p>Deck Cards Remaining: " + jsonObj.deckSize + "</p>");
+                console.log(jsonObj);
+            }
+            
+        };
     });
     $("#btnBackInsideSelectedGame").on("singletap", function () {
-            $.UIGoBack();
-        });
+        socket.close();
+        $.UIGoBack();
+    });
+
+
+    $("#all-players").on("singletap", "[data-playername]", function () {
+        var message = {};
+        message.command = "drawcard";
+        message.pname = $(this).attr("data-playername");
+        console.log(message);
+        socket.send(JSON.stringify(message));
+    });
+
+    $(".special").draggable();
+
+    $("[drop-target]").droppable({
+        accept: ".special",
+        tolerance: "pointer",
+        drop: function (_, ui) {
+            if ($(ui.draggable).attr("data-draw")) {
+                alert("success");
+                console.log("dropped");
+            }
+        }
+    });
+
 });
