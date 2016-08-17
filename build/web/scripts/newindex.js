@@ -60,7 +60,8 @@ $(function () {
             var jsonObj = JSON.parse(msg.data);
             if (jsonObj.command === "yourcards") {
                 var cardUrl = $('<p class = "discarded">');
-                var img = $("<img>").attr("src", "Images/" + jsonObj.hand.image + ".png");
+                var img = $("<img>").attr("src", "Images/" + jsonObj.hand.image + ".png")
+                        .attr("alt",jsonObj.hand.image);
                 cardUrl.append(img);
 
                 $("#discardPile").empty();
