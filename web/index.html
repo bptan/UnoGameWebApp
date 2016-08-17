@@ -6,19 +6,97 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Uno with Friends</title>
+        <title>Create Game View</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="libs/chui/chui-ios-3.9.2.css"/>
+        <link rel="stylesheet" href="index.css"/>
+        <script src="libs/handlebars-v4.0.5.js"></script>
         <script src="libs/jquery-3.1.0.js"></script>
+        <script src="libs/jquery-ui.js"></script>
+        <script src="libs/chui/chui-3.9.2.js"></script>
+        <script type="text/x-handlebars" id="gamesTemplate">
+            {{#each games }}
+            <li>
+            <h3>{{this.title}}</h3>
+            <h4>{{this.gameid}}</h4>
+            <p>{{this.status}}</p>
+            <p>{{this.numOfPlayers}}</p>
+            </li>
+            {{/each}}
+        </script>
+        <script type="text/x-handlebars" id="playersTemplate">
+            {{#each players }}
+            <div drop-target="{{this}}">
+            <p class="playerName">{{this}}</p><br>
+            <button data-playername="{{this}}">Draw Card</button>
+            </div>
+            {{/each}}
+        </script>
         <script src="scripts/index.js"></script>
+        
     </head>
     <body>
-        <h1>New Game</h1>
-        
-        
-            Title: <input id = "txtTitle" type="text" name="title"><br>
-            <input id="btnCreate" type="submit" value="Create"/>
-        
-        <div id="games"></div>
+        <nav>
+            <h1> Create Game </h1>
+            <button type="button" id="btnCreate" name="btnCreate">Create</button>
+        </nav>
+        <article id="createGame">
+            <section>
+
+                <div class="content">
+                    <table class="tableStyle1" align="center">
+                        <tr>
+                            <td colspan="2" align="center" style="padding-top:30px; padding-bottom: 20px;"><u><h3>Player
+                                        Create New Game</h3></u></td>
+                        </tr>
+                        <tr>
+                            <td>Title:</td>
+                            <td><input type="text" id="txtTitle" name="title" placeholder="Enter Title">
+                            </td>
+
+                    </table>
+                    <label id="information"></label>
+                </div>
+
+            </section>
+        </article>
+
+        <nav>
+            <button type="button" id="btnCreateMore">Create More Games</button>
+            <h1>List of Games</h1>
+            <button type="button" id="btnReload">Reload</button>
+        </nav>
+        <article id="listGames">
+            <section>
+                <h2>List of games</h2>
+                <ul class="list" id="all-games">
+                </ul>
+            </section>
+        </article>
+        <nav>
+            <button type="button" id="btnBackInsideSelectedGame">Back</button>
+            <h1> Selected Game </h1>
+        </nav>
+        <article id="selectedGame">
+            <section>
+                <div id="gametitle"></div>
+                <table border="1">
+                    <col width="150">
+                    <col width="150">
+                    <col width="150">
+                    <tr>
+                        <td height ="400" id="all-players"></td>
+                        <td id="discardPile"></td>
+                        <td id="drawCards"><img alt="Unocard" class="special" src="Images/back.png" data-draw></td>
+                    </tr>        
+                    
+                </table> 
+                
+                
+                <h2 id="cards-remaining"></h2>
+            </section>
+        </article>
+
     </body>
 </html>

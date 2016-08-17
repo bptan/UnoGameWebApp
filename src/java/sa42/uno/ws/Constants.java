@@ -16,9 +16,7 @@ public class Constants {
     public static final String ATTRIBUTE_PLAYERNAME = "pname";
     public static final String ATTRIBUTE_HAND = "hand";
     public static final String ATTRIBUTE_CARD = "card";
-    public static final String ATTRIBUTE_DECKSIZE = "deckSize";
-    public static final String COMMAND_CREATEGAME = "creategame";
-    public static final String COMMAND_STARTGAME = "startgame";
+    public static final String ATTRIBUTE_DECKSIZE = "deckSize";    
     public static final String COMMAND_YOURCARDS = "yourcards";
     public static final String COMMAND_DRAWCARD = "drawcard";
     public static final String COMMAND_PLAYCARD = "playcard";
